@@ -41,40 +41,39 @@ class BinaryTree {
     }
 
     // Pre-order Traversal (Root, Left, Right)
-    preOrderTraversal(node) {
+    preOrderTraversal(node, callback = console.log) {
         if (node === null) {
             return;
         }
 
-        console.log(node.value);
-        this.preOrderTraversal(node.left);
-        this.preOrderTraversal(node.right);
+        callback(node.value); // Process the root node
+        this.preOrderTraversal(node.left, callback); // Recur on the left subtree
+        this.preOrderTraversal(node.right, callback); // Recur on the right subtree
     }
 
     // In-order Traversal (Left, Root, Right)
-    inOrderTraversal(node) {
+    inOrderTraversal(node, callback = console.log) {
         if (node === null) {
             return;
         }
-
-        this.inOrderTraversal(node.left);
-        console.log(node.value);
-        this.inOrderTraversal(node.right);
+        this.inOrderTraversal(node.left, callback);
+        callback(node.value);
+        this.inOrderTraversal(node.right, callback);
     }
 
     // Post-order Traversal (Left, Right, Root)
-    postOrderTraversal(node) {
+    postOrderTraversal(node, callback = console.log) {
         if (node === null) {
             return;
         }
 
-        this.postOrderTraversal(node.left);
-        this.postOrderTraversal(node.right);
-        console.log(node.value);
+        this.postOrderTraversal(node.left, callback); // Recur on the left subtree
+        this.postOrderTraversal(node.right, callback); // Recur on the right subtree
+        callback(node.value); // Process the root node
     }
 
     // Level-order Traversal (Breadth-First Traversal)
-    levelOrderTraversal() {
+    levelOrderTraversal(callback = console.log) {
         if (this.root === null) {
             return;
         }
@@ -83,7 +82,7 @@ class BinaryTree {
 
         while (queue.length > 0) {
             const current = queue.shift();
-            console.log(current.value);
+            callback(current.value); // Process the current node
 
             if (current.left !== null) {
                 queue.push(current.left);
@@ -107,77 +106,16 @@ class BinaryTree {
         return Math.max(leftHeight, rightHeight) + 1;
     }
 
-    // Method to visualize the binary tree
-    visualize(node, space = 0, levelSpace = 5) {
+    visualizeTree(node, prefix = '', isLeft = true, result = []) {
         if (node === null) {
             return;
         }
 
-        // Increase distance between levels
-        space += levelSpace;
+        result.push(prefix + (isLeft ? '├── ' : '└── ') + node.value);
 
-        // Process right child first
-        this.visualize(node.right, space);
-
-        // Print current node after space count
-        console.log(" ".repeat(space - levelSpace) + node.value);
-
-        // Process left child
-        this.visualize(node.left, space);
-    }
-
-    // Improved method to visualize the binary tree
-    visualizeBetter() {
-        if (this.root === null) {
-            console.log("The tree is empty.");
-            return;
-        }
-
-        const levels = [];
-        const queue = [{ node: this.root, level: 0 }];
-
-        while (queue.length > 0) {
-            const { node, level } = queue.shift();
-
-            if (!levels[level]) {
-                levels[level] = [];
-            }
-
-            levels[level].push(node ? node.value : " ");
-
-            if (node) {
-                queue.push({ node: node.left, level: level + 1 });
-                queue.push({ node: node.right, level: level + 1 });
-            }
-        }
-
-        // Print the tree level by level
-        const maxWidth = Math.pow(2, levels.length - 1) * 4; // Adjust spacing
-        levels.forEach((level, i) => {
-            const space = Math.floor(maxWidth / Math.pow(2, i + 1));
-            console.log(
-                level
-                    .map((value) => (value === " " ? " ".repeat(3) : value.toString().padStart(3, " ")))
-                    .join(" ".repeat(space))
-            );
-        });
-    }
-
-    // Method to visualize the binary tree in a tree-like structure
-    visualizeTree(node, prefix = "", isLeft = true) {
-        if (node === null) {
-            return;
-        }
-
-        // Print the current node
-        console.log(prefix + (isLeft ? "├── " : "└── ") + node.value);
-
-        // Recur for the left and right children
-        const childPrefix = prefix + (isLeft ? "│   " : "    ");
-        if (node.left || node.right) {
-            this.visualizeTree(node.left, childPrefix, true);
-            this.visualizeTree(node.right, childPrefix, false);
-        }
+        const childPrefix = prefix + (isLeft ? '│   ' : '    ');
+        this.visualizeTree(node.left, childPrefix, true, result);
+        this.visualizeTree(node.right, childPrefix, false, result);
     }
 }
 

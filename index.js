@@ -5,43 +5,132 @@ const BinarySearchTree = require('./binarySearchTree');
 const app = express();
 const port = 3000;
 
-// Middleware to serve static files (if needed)
+// Middleware to parse JSON
+app.use(express.json());
+
+// Middleware to serve static files
 app.use(express.static('public'));
 
-// Route to test BinaryTree
-app.get('/binary-tree', (req, res) => {
-    const tree = new BinaryTree();
-    tree.insert(10);
-    tree.insert(20);
-    tree.insert(30);
-    tree.insert(40);
-    tree.insert(50);
+// Initialize trees
+const binaryTree = new BinaryTree();
+const binarySearchTree = new BinarySearchTree();
 
-    const traversalResult = [];
-    tree.inOrderTraversal(tree.root, (value) => traversalResult.push(value));
-
-    res.json({
-        message: 'Binary Tree Traversal',
-        inOrder: traversalResult,
-    });
+// Routes for Binary Tree
+app.post('/binary-tree/add', (req, res) => {
+    const { value } = req.body;
+    binaryTree.insert(value);
+    res.json({ message: `Node ${value} added to Binary Tree` });
 });
 
-// Route to test BinarySearchTree
-app.get('/binary-search-tree', (req, res) => {
-    const bst = new BinarySearchTree();
-    bst.insert(50);
-    bst.insert(30);
-    bst.insert(70);
-    bst.insert(20);
-    bst.insert(40);
+app.get('/binary-tree/visualize', (req, res) => {
+    const visualization = [];
+    binaryTree.visualizeTree(binaryTree.root, '', true, visualization);
+    res.json({ visualization });
+});
 
+app.get('/binary-tree/height', (req, res) => {
+    const height = binaryTree.findHeight(binaryTree.root);
+    res.json({ height });
+});
+
+app.get('/binary-tree/traversal', (req, res) => {
     const traversalResult = [];
-    bst.inOrderTraversal(bst.root, (value) => traversalResult.push(value));
+    binaryTree.inOrderTraversal(binaryTree.root, (value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
 
-    res.json({
-        message: 'Binary Search Tree Traversal',
-        inOrder: traversalResult,
-    });
+// Routes for Binary Tree Traversals
+app.get('/binary-tree/traversal/in-order', (req, res) => {
+    const traversalResult = [];
+    binaryTree.inOrderTraversal(binaryTree.root, (value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/binary-tree/traversal/pre-order', (req, res) => {
+    const traversalResult = [];
+    binaryTree.preOrderTraversal(binaryTree.root, (value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/binary-tree/traversal/post-order', (req, res) => {
+    const traversalResult = [];
+    binaryTree.postOrderTraversal(binaryTree.root, (value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
+
+// Level-order Traversal for Binary Tree
+app.get('/binary-tree/traversal/level-order', (req, res) => {
+    const traversalResult = [];
+    binaryTree.levelOrderTraversal((value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
+
+// Routes for Binary Search Tree
+app.post('/binary-search-tree/add', (req, res) => {
+    const { value } = req.body;
+    binarySearchTree.insert(value);
+    res.json({ message: `Node ${value} added to Binary Search Tree` });
+});
+
+app.get('/binary-search-tree/visualize', (req, res) => {
+    const visualization = [];
+    binarySearchTree.visualizeTree(binarySearchTree.root, '', true, visualization);
+    res.json({ visualization });
+});
+
+app.get('/binary-search-tree/traversal', (req, res) => {
+    const traversalResult = [];
+    binarySearchTree.inOrderTraversal(binarySearchTree.root, (value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/binary-search-tree/height', (req, res) => {
+    const height = binarySearchTree.findHeight(binarySearchTree.root);
+    res.json({ height });
+});
+
+app.get('/binary-search-tree/search', (req, res) => {
+    const { value } = req.query;
+    const found = binarySearchTree.search(parseInt(value));
+    res.json({ found });
+});
+
+// Route to find the minimum value in the BST
+app.get('/binary-search-tree/min', (req, res) => {
+    const minValue = binarySearchTree.findMin();
+    res.json({ min: minValue });
+});
+
+// Route to find the maximum value in the BST
+app.get('/binary-search-tree/max', (req, res) => {
+    const maxValue = binarySearchTree.findMax();
+    res.json({ max: maxValue });
+});
+
+// Routes for Binary Search Tree Traversals
+app.get('/binary-search-tree/traversal/in-order', (req, res) => {
+    const traversalResult = [];
+    binarySearchTree.inOrderTraversal(binarySearchTree.root, (value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/binary-search-tree/traversal/pre-order', (req, res) => {
+    const traversalResult = [];
+    binarySearchTree.preOrderTraversal(binarySearchTree.root, (value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/binary-search-tree/traversal/post-order', (req, res) => {
+    const traversalResult = [];
+    binarySearchTree.postOrderTraversal(binarySearchTree.root, (value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
+});
+
+// Level-order Traversal for Binary Search Tree
+app.get('/binary-search-tree/traversal/level-order', (req, res) => {
+    const traversalResult = [];
+    binarySearchTree.levelOrderTraversal((value) => traversalResult.push(value));
+    res.json({ traversal: traversalResult });
 });
 
 // Start the server

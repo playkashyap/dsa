@@ -56,33 +56,55 @@ class BinarySearchTree {
     }
 
     // In-order Traversal (Left, Root, Right)
-    inOrderTraversal(node) {
+    inOrderTraversal(node, callback = console.log) {
         if (node === null) {
             return;
         }
-        this.inOrderTraversal(node.left);
-        console.log(node.value);
-        this.inOrderTraversal(node.right);
+        this.inOrderTraversal(node.left, callback);
+        callback(node.value);
+        this.inOrderTraversal(node.right, callback);
     }
 
     // Pre-order Traversal (Root, Left, Right)
-    preOrderTraversal(node) {
+    preOrderTraversal(node, callback = console.log) {
         if (node === null) {
             return;
         }
-        console.log(node.value);
-        this.preOrderTraversal(node.left);
-        this.preOrderTraversal(node.right);
+        callback(node.value);
+        this.preOrderTraversal(node.left, callback);
+        this.preOrderTraversal(node.right, callback);
     }
 
     // Post-order Traversal (Left, Right, Root)
-    postOrderTraversal(node) {
+    postOrderTraversal(node, callback = console.log) {
         if (node === null) {
             return;
         }
-        this.postOrderTraversal(node.left);
-        this.postOrderTraversal(node.right);
-        console.log(node.value);
+        this.postOrderTraversal(node.left, callback);
+        this.postOrderTraversal(node.right, callback);
+        callback(node.value);
+    }
+
+    // Level-order Traversal (Breadth-First Traversal)
+    levelOrderTraversal(callback = console.log) {
+        if (this.root === null) {
+            return;
+        }
+
+        const queue = [this.root];
+
+        while (queue.length > 0) {
+            const current = queue.shift();
+            callback(current.value); // Process the current node
+
+            if (current.left !== null) {
+                queue.push(current.left);
+            }
+
+            if (current.right !== null) {
+                queue.push(current.right);
+            }
+        }
     }
 
     // Find the minimum value in the BST
@@ -130,6 +152,18 @@ class BinarySearchTree {
             node.right = this.delete(node.value, node.right);
         }
         return node;
+    }
+
+    // Method to find the height of the binary search tree
+    findHeight(node) {
+        if (node === null) {
+            return -1; // Return -1 for null to account for edges
+        }
+
+        const leftHeight = this.findHeight(node.left);
+        const rightHeight = this.findHeight(node.right);
+
+        return Math.max(leftHeight, rightHeight) + 1;
     }
 
     // Method to visualize the binary search tree
@@ -189,20 +223,16 @@ class BinarySearchTree {
     }
 
     // Method to visualize the binary search tree in a tree-like structure
-    visualizeTree(node, prefix = "", isLeft = true) {
+    visualizeTree(node, prefix = '', isLeft = true, result = []) {
         if (node === null) {
             return;
         }
 
-        // Print the current node
-        console.log(prefix + (isLeft ? "├── " : "└── ") + node.value);
+        result.push(prefix + (isLeft ? '├── ' : '└── ') + node.value);
 
-        // Recur for the left and right children
-        const childPrefix = prefix + (isLeft ? "│   " : "    ");
-        if (node.left || node.right) {
-            this.visualizeTree(node.left, childPrefix, true);
-            this.visualizeTree(node.right, childPrefix, false);
-        }
+        const childPrefix = prefix + (isLeft ? '│   ' : '    ');
+        this.visualizeTree(node.left, childPrefix, true, result);
+        this.visualizeTree(node.right, childPrefix, false, result);
     }
 }
 
