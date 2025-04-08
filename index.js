@@ -1,6 +1,6 @@
 const express = require('express');
-const BinaryTree = require('./script');
-const BinarySearchTree = require('./binarySearchTree');
+const BinaryTree = require('./public/js/script');
+const BinarySearchTree = require('./public/js/binarySearchTree');
 
 const app = express();
 const port = 3000;
