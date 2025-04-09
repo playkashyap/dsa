@@ -1,0 +1,47 @@
+<div class="accordion-item">
+    <h2 class="accordion-header" id="avlTreeHeading">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#avlTreeCollapse" aria-expanded="false" aria-controls="avlTreeCollapse">
+            AVL Tree
+        </button>
+    </h2>
+    <div id="avlTreeCollapse" class="accordion-collapse collapse" aria-labelledby="avlTreeHeading" data-bs-parent="#treeAccordion">
+        <div class="accordion-body">
+            <div class="card-body">
+                <div class="row">
+                    <!-- Left Side: Buttons and Outputs -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <input type="number" id="avlTreeInput" class="form-control" placeholder="Enter a value to add" />
+                        </div>
+                        <div class="mb-3">
+                            <button id="addAVLTreeNode" class="btn btn-success me-2 mb-2">Add Node</button>
+                            <button id="avlTreeInOrderTraversal" class="btn btn-secondary me-2 mb-2">In-Order Traversal</button>
+                            <button id="avlTreePreOrderTraversal" class="btn btn-secondary me-2 mb-2">Pre-Order Traversal</button>
+                            <button id="avlTreePostOrderTraversal" class="btn btn-secondary me-2 mb-2">Post-Order Traversal</button>
+                            <button id="avlTreeLevelOrderTraversal" class="btn btn-secondary mb-2">Level-Order Traversal</button>
+                        </div>
+                        <div class="mb-3">
+                            <input type="number" id="avlTreeDeleteInput" class="form-control" placeholder="Enter a value to delete" />
+                            <button id="deleteAVLTreeNode" class="btn btn-danger me-2 mt-2">Delete Node</button>
+                        </div>
+                        <div class="mb-3">
+                            <button id="avlTreeMin" class="btn btn-info me-2 mb-2">Find Min</button>
+                            <button id="avlTreeMax" class="btn btn-info me-2 mb-2">Find Max</button>
+                            <button id="avlTreeHeight" class="btn btn-warning me-2 mb-2">Find Height</button>
+                            <button id="avlTreeBalanceFactor" class="btn btn-info me-2 mb-2">Find Balance Factor</button>
+                            <input type="number" id="avlTreeSearchInput" class="form-control d-inline-block w-auto me-2 mb-2" placeholder="Search value" />
+                            <button id="avlTreeSearch" class="btn btn-primary mb-2">Search</button>
+                        </div>
+                        <pre id="avlTreeOutput" class="bg-light p-3 border rounded"></pre>
+                    </div>
+
+                    <!-- Right Side: Tree Visualization -->
+                    <div class="col-md-6">
+                        <h5 class="text-center">Tree Visualization</h5>
+                        <pre id="avlTreeVisualization" class="bg-light p-3 border rounded"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

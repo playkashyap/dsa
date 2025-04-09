@@ -1,0 +1,38 @@
+<div class="accordion-item">
+    <h2 class="accordion-header" id="binaryTreeHeading">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#binaryTreeCollapse" aria-expanded="true" aria-controls="binaryTreeCollapse">
+            Binary Tree
+        </button>
+    </h2>
+    <div id="binaryTreeCollapse" class="accordion-collapse collapse show" aria-labelledby="binaryTreeHeading" data-bs-parent="#treeAccordion">
+        <div class="accordion-body">
+            <div class="card-body">
+                <div class="row">
+                    <!-- Left Side: Buttons and Outputs -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <input type="number" id="binaryTreeInput" class="form-control" placeholder="Enter a value" />
+                        </div>
+                        <div class="mb-3">
+                            <button id="addBinaryTreeNode" class="btn btn-success me-2 mb-2">Add Node</button>
+                            <button id="binaryTreeInOrderTraversal" class="btn btn-secondary me-2 mb-2">In-Order Traversal</button>
+                            <button id="binaryTreePreOrderTraversal" class="btn btn-secondary me-2 mb-2">Pre-Order Traversal</button>
+                            <button id="binaryTreePostOrderTraversal" class="btn btn-secondary mb-2">Post-Order Traversal</button>
+                            <button id="binaryTreeLevelOrderTraversal" class="btn btn-secondary mb-2">Level-Order Traversal</button>
+                        </div>
+                        <div class="mb-3">
+                            <button id="binaryTreeHeight" class="btn btn-warning me-2 mb-2">Find Height</button>
+                        </div>
+                        <pre id="binaryTreeOutput" class="bg-light p-3 border rounded"></pre>
+                    </div>
+
+                    <!-- Right Side: Tree Visualization -->
+                    <div class="col-md-6">
+                        <h5 class="text-center">Tree Visualization</h5>
+                        <pre id="binaryTreeVisualization" class="bg-light p-3 border rounded"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

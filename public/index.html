@@ -13,233 +13,39 @@
     <div class="container py-5">
         <h1 class="text-center mb-4">Binary Trees</h1>
 
-        <!-- Binary Tree Section -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h2 class="h5">Binary Tree</h2>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- Left Side: Buttons and Outputs -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <input type="number" id="binaryTreeInput" class="form-control"
-                                placeholder="Enter a value" />
-                        </div>
-                        <div class="mb-3">
-                            <button id="addBinaryTreeNode" class="btn btn-success me-2 mb-2">Add Node</button>
-                            <button id="binaryTreeInOrderTraversal" class="btn btn-secondary me-2 mb-2">In-Order Traversal</button>
-                            <button id="binaryTreePreOrderTraversal" class="btn btn-secondary me-2 mb-2">Pre-Order Traversal</button>
-                            <button id="binaryTreePostOrderTraversal" class="btn btn-secondary mb-2">Post-Order Traversal</button>
-                            <button id="binaryTreeLevelOrderTraversal" class="btn btn-secondary mb-2">Level-Order Traversal</button>
-                        </div>
-                        <div class="mb-3">
-                            <button id="binaryTreeHeight" class="btn btn-warning me-2 mb-2">Find Height</button>
-                        </div>
-                        <pre id="binaryTreeOutput" class="bg-light p-3 border rounded"></pre>
-                    </div>
+        <!-- Accordion -->
+        <div class="accordion" id="treeAccordion">
+            <!-- Include Binary Tree -->
+            <div id="binaryTreeContainer"></div>
 
-                    <!-- Right Side: Tree Visualization -->
-                    <div class="col-md-6">
-                        <h5 class="text-center">Tree Visualization</h5>
-                        <pre id="binaryTreeVisualization" class="bg-light p-3 border rounded"></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <!-- Include Binary Search Tree -->
+            <div id="binarySearchTreeContainer"></div>
 
-        <!-- Binary Search Tree Section -->
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h2 class="h5">Binary Search Tree</h2>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- Left Side: Buttons and Outputs -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <input type="number" id="binarySearchTreeInput" class="form-control"
-                                placeholder="Enter a value" />
-                        </div>
-                        <div class="mb-3">
-                            <button id="addBinarySearchTreeNode" class="btn btn-success me-2 mb-2">Add Node</button>
-                            <button id="binarySearchTreeInOrderTraversal" class="btn btn-secondary me-2 mb-2">In-Order Traversal</button>
-                            <button id="binarySearchTreePreOrderTraversal" class="btn btn-secondary me-2 mb-2">Pre-Order Traversal</button>
-                            <button id="binarySearchTreePostOrderTraversal" class="btn btn-secondary mb-2">Post-Order Traversal</button>
-                            <button id="binarySearchTreeLevelOrderTraversal" class="btn btn-secondary mb-2">Level-Order Traversal</button>
-                        </div>
-                        <div class="mb-3">
-                            <button id="binarySearchTreeHeight" class="btn btn-warning me-2 mb-2">Find Height</button>
-                            <input type="number" id="binarySearchTreeSearchInput" class="form-control d-inline-block w-auto me-2 mb-2" placeholder="Search value" />
-                            <button id="binarySearchTreeSearch" class="btn btn-primary mb-2">Search</button>
-                        </div>
-                        <div class="mb-3">
-                            <button id="binarySearchTreeMin" class="btn btn-info me-2 mb-2">Find Min</button>
-                            <button id="binarySearchTreeMax" class="btn btn-info mb-2">Find Max</button>
-                        </div>
-                        <pre id="binarySearchTreeOutput" class="bg-light p-3 border rounded"></pre>
-                    </div>
-
-                    <!-- Right Side: Tree Visualization -->
-                    <div class="col-md-6">
-                        <h5 class="text-center">Tree Visualization</h5>
-                        <pre id="binarySearchTreeVisualization" class="bg-light p-3 border rounded"></pre>
-                    </div>
-                </div>
-            </div>
+            <!-- Include AVL Tree -->
+            <div id="avlTreeContainer"></div>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Tree Scripts -->
+    <script src="/js/binaryTree.js"></script>
+    <script src="/js/binarySearchTree.js"></script>
+    <script src="/js/avlTree.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Function to update the Binary Tree visualization
-            async function updateBinaryTreeVisualization() {
-                const response = await fetch('/binary-tree/visualize');
-                const data = await response.json();
-                if (data.visualization && Array.isArray(data.visualization)) {
-                    document.getElementById('binaryTreeVisualization').textContent = data.visualization.join('\n');
-                } else {
-                    document.getElementById('binaryTreeVisualization').textContent = 'Tree is empty or visualization failed.';
-                }
-            }
+        // Dynamically load components
+        async function loadComponent(containerId, filePath) {
+            const response = await fetch(filePath);
+            const html = await response.text();
+            document.getElementById(containerId).innerHTML = html;
+        }
 
-            // Function to update the Binary Search Tree visualization
-            async function updateBinarySearchTreeVisualization() {
-                const response = await fetch('/binary-search-tree/visualize');
-                const data = await response.json();
-                if (data.visualization && Array.isArray(data.visualization)) {
-                    document.getElementById('binarySearchTreeVisualization').textContent = data.visualization.join('\n');
-                } else {
-                    document.getElementById('binarySearchTreeVisualization').textContent = 'Tree is empty or visualization failed.';
-                }
-            }
-
-            // Binary Tree
-            document.getElementById('addBinaryTreeNode').addEventListener('click', async () => {
-                const value = document.getElementById('binaryTreeInput').value;
-                if (value) {
-                    await fetch('/binary-tree/add', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ value: parseInt(value) }),
-                    });
-                    document.getElementById('binaryTreeInput').value = '';
-                    updateBinaryTreeVisualization(); // Update visualization
-                }
-            });
-
-            document.getElementById('binaryTreeInOrderTraversal').addEventListener('click', async () => {
-                const response = await fetch('/binary-tree/traversal/in-order');
-                const data = await response.json();
-                document.getElementById('binaryTreeOutput').textContent += `\nIn-Order Traversal: ${JSON.stringify(data.traversal, null, 2)}`;
-                updateBinaryTreeVisualization(); // Update visualization
-            });
-
-            document.getElementById('binaryTreePreOrderTraversal').addEventListener('click', async () => {
-                const response = await fetch('/binary-tree/traversal/pre-order');
-                const data = await response.json();
-                document.getElementById('binaryTreeOutput').textContent += `\nPre-Order Traversal: ${JSON.stringify(data.traversal, null, 2)}`;
-                updateBinaryTreeVisualization(); // Update visualization
-            });
-
-            document.getElementById('binaryTreePostOrderTraversal').addEventListener('click', async () => {
-                const response = await fetch('/binary-tree/traversal/post-order');
-                const data = await response.json();
-                document.getElementById('binaryTreeOutput').textContent += `\nPost-Order Traversal: ${JSON.stringify(data.traversal, null, 2)}`;
-                updateBinaryTreeVisualization(); // Update visualization
-            });
-
-            document.getElementById('binaryTreeHeight').addEventListener('click', async () => {
-                const response = await fetch('/binary-tree/height');
-                const data = await response.json();
-                document.getElementById('binaryTreeOutput').textContent += `\nHeight: ${data.height}`;
-                updateBinaryTreeVisualization(); // Update visualization
-            });
-
-            document.getElementById('binaryTreeLevelOrderTraversal').addEventListener('click', async () => {
-                const response = await fetch('/binary-tree/traversal/level-order');
-                const data = await response.json();
-                document.getElementById('binaryTreeOutput').textContent += `\nLevel-Order Traversal: ${JSON.stringify(data.traversal, null, 2)}`;
-            });
-
-            // Binary Search Tree
-            document.getElementById('addBinarySearchTreeNode').addEventListener('click', async () => {
-                const value = document.getElementById('binarySearchTreeInput').value;
-                if (value) {
-                    await fetch('/binary-search-tree/add', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ value: parseInt(value) }),
-                    });
-                    document.getElementById('binarySearchTreeInput').value = '';
-                    updateBinarySearchTreeVisualization(); // Update visualization
-                }
-            });
-
-            document.getElementById('binarySearchTreeInOrderTraversal').addEventListener('click', async () => {
-                const response = await fetch('/binary-search-tree/traversal/in-order');
-                const data = await response.json();
-                document.getElementById('binarySearchTreeOutput').textContent += `\nIn-Order Traversal: ${JSON.stringify(data.traversal, null, 2)}`;
-                updateBinarySearchTreeVisualization(); // Update visualization
-            });
-
-            document.getElementById('binarySearchTreePreOrderTraversal').addEventListener('click', async () => {
-                const response = await fetch('/binary-search-tree/traversal/pre-order');
-                const data = await response.json();
-                document.getElementById('binarySearchTreeOutput').textContent += `\nPre-Order Traversal: ${JSON.stringify(data.traversal, null, 2)}`;
-                updateBinarySearchTreeVisualization(); // Update visualization
-            });
-
-            document.getElementById('binarySearchTreePostOrderTraversal').addEventListener('click', async () => {
-                const response = await fetch('/binary-search-tree/traversal/post-order');
-                const data = await response.json();
-                document.getElementById('binarySearchTreeOutput').textContent += `\nPost-Order Traversal: ${JSON.stringify(data.traversal, null, 2)}`;
-                updateBinarySearchTreeVisualization(); // Update visualization
-            });
-
-            document.getElementById('binarySearchTreeHeight').addEventListener('click', async () => {
-                const response = await fetch('/binary-search-tree/height');
-                const data = await response.json();
-                document.getElementById('binarySearchTreeOutput').textContent += `\nHeight: ${data.height}`;
-                updateBinarySearchTreeVisualization(); // Update visualization
-            });
-
-            document.getElementById('binarySearchTreeSearch').addEventListener('click', async () => {
-                const value = document.getElementById('binarySearchTreeSearchInput').value;
-                if (value) {
-                    const response = await fetch(`/binary-search-tree/search?value=${value}`);
-                    const data = await response.json();
-                    document.getElementById('binarySearchTreeOutput').textContent += `\nSearch Result: Found = ${data.found}`;
-                    updateBinarySearchTreeVisualization(); // Update visualization
-                }
-            });
-
-            // Find the minimum value in the BST
-            document.getElementById('binarySearchTreeMin').addEventListener('click', async () => {
-                const response = await fetch('/binary-search-tree/min');
-                const data = await response.json();
-                document.getElementById('binarySearchTreeOutput').textContent += `\nMin Value: ${data.min}`;
-            });
-
-            // Find the maximum value in the BST
-            document.getElementById('binarySearchTreeMax').addEventListener('click', async () => {
-                const response = await fetch('/binary-search-tree/max');
-                const data = await response.json();
-                document.getElementById('binarySearchTreeOutput').textContent += `\nMax Value: ${data.max}`;
-            });
-
-            document.getElementById('binarySearchTreeLevelOrderTraversal').addEventListener('click', async () => {
-                const response = await fetch('/binary-search-tree/traversal/level-order');
-                const data = await response.json();
-                document.getElementById('binarySearchTreeOutput').textContent += `\nLevel-Order Traversal: ${JSON.stringify(data.traversal, null, 2)}`;
-            });
-
-            // Initial visualization updates
-            updateBinaryTreeVisualization();
-            updateBinarySearchTreeVisualization();
-        });
+        // Load tree components
+        loadComponent('binaryTreeContainer', '/components/binaryTree.html');
+        loadComponent('binarySearchTreeContainer', '/components/binarySearchTree.html');
+        loadComponent('avlTreeContainer', '/components/avlTree.html');
     </script>
 </body>
 

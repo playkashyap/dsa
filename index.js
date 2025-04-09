@@ -1,6 +1,7 @@
 const express = require('express');
-const BinaryTree = require('./public/js/script');
-const BinarySearchTree = require('./public/js/binarySearchTree');
+const BinaryTree = require('./js/script');
+const BinarySearchTree = require('./js/binarySearchTree');
+const AVLTree = require('./js/avlTree');
 
 const app = express();
 const port = 3000;
@@ -14,6 +15,8 @@ app.use(express.static('public'));
 // Initialize trees
 const binaryTree = new BinaryTree();
 const binarySearchTree = new BinarySearchTree();
+const avlTree = new AVLTree(); // Initialize AVL tree
+let avlRoot = null; // Root node for the AVL tree
 
 // Routes for Binary Tree
 app.post('/binary-tree/add', (req, res) => {
@@ -131,6 +134,75 @@ app.get('/binary-search-tree/traversal/level-order', (req, res) => {
     const traversalResult = [];
     binarySearchTree.levelOrderTraversal((value) => traversalResult.push(value));
     res.json({ traversal: traversalResult });
+});
+
+// Routes for AVL Tree
+app.post('/avl-tree/add', (req, res) => {
+    const { value } = req.body;
+    avlRoot = avlTree.insert(avlRoot, value); // Insert into AVL tree
+    res.json({ message: `Node ${value} added to AVL Tree` });
+});
+
+app.get('/avl-tree/traversal/in-order', (req, res) => {
+    const traversalResult = avlTree.inOrder(avlRoot);
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/avl-tree/traversal/pre-order', (req, res) => {
+    const traversalResult = avlTree.preOrder(avlRoot);
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/avl-tree/traversal/post-order', (req, res) => {
+    const traversalResult = avlTree.postOrder(avlRoot);
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/avl-tree/traversal/level-order', (req, res) => {
+    const traversalResult = avlTree.levelOrder(avlRoot);
+    res.json({ traversal: traversalResult });
+});
+
+app.get('/avl-tree/visualize', (req, res) => {
+    const visualization = avlTree.visualizeTree(avlRoot, '', true, []);
+    res.json({ visualization });
+});
+
+app.delete('/avl-tree/delete', (req, res) => {
+    const { value } = req.body;
+    avlRoot = avlTree.delete(avlRoot, value); // Delete from AVL tree
+    res.json({ message: `Node ${value} deleted from AVL Tree` });
+});
+
+// Find the minimum value in the AVL tree
+app.get('/avl-tree/min', (req, res) => {
+    const minValue = avlTree.findMin(avlRoot);
+    res.json({ min: minValue });
+});
+
+// Find the maximum value in the AVL tree
+app.get('/avl-tree/max', (req, res) => {
+    const maxValue = avlTree.findMax(avlRoot);
+    res.json({ max: maxValue });
+});
+
+// Find the height of the AVL tree
+app.get('/avl-tree/height', (req, res) => {
+    const height = avlTree.findHeight(avlRoot);
+    res.json({ height });
+});
+
+// Search for a value in the AVL tree
+app.get('/avl-tree/search', (req, res) => {
+    const { value } = req.query;
+    const found = avlTree.search(avlRoot, parseInt(value));
+    res.json({ found });
+});
+
+// Get the balance factor of the AVL tree
+app.get('/avl-tree/balance-factor', (req, res) => {
+    const balanceFactor = avlTree.calculateBalanceFactor(avlRoot);
+    res.json({ balanceFactor });
 });
 
 // Start the server
